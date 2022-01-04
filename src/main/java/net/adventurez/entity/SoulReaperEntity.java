@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import net.adventurez.init.EntityInit;
 import net.adventurez.init.SoundInit;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityDimensions;
@@ -45,9 +46,12 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.entity.mob.AbstractPiglinEntity;
 import net.minecraft.entity.mob.HostileEntity;
@@ -122,14 +126,14 @@ public class SoulReaperEntity extends HostileEntity implements RangedAttackMob {
     }
 
     public static boolean canSpawn(EntityType<SoulReaperEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        Optional<RegistryKey<Biome>> optional = world.getBiomeKey(pos);
+        //System.out.println("Trying to spawn " + type.toString() + " on " + world.getBlockState(pos.down()).getBlock().toString() + " in " + (new TranslatableText(Util.createTranslationKey("biome", world.getRegistryManager().get(Registry.BIOME_KEY).getId(world.getBiome(pos))))).getString() + " (light level: " + world.getBaseLightLevel(pos, 0) + ") at x:" + pos.getX() + ", y:" + pos.getY() + ", z:" + pos.getZ() + " for reason: " + spawnReason.toString() + "!");
         List<SoulReaperEntity> list = world.getEntitiesByClass(SoulReaperEntity.class, new Box(pos).expand(60D), EntityPredicates.EXCEPT_SPECTATOR);
-        boolean bl = (world.getDifficulty() != Difficulty.PEACEFUL && world.getLightLevel(LightType.BLOCK, pos) < 10 && canSpawnInDark(type, world, spawnReason, pos, random)
-                && world.getBlockState(pos.up(3)).isAir() && list.isEmpty() && random.nextInt(7) == 0) || spawnReason == SpawnReason.SPAWNER;
-        if (Objects.equals(optional, Optional.of(BiomeKeys.SOUL_SAND_VALLEY))) {
-            return bl;
-        } else
-            return false;
+        if (world.getDifficulty() != Difficulty.PEACEFUL && world.getBlockState(pos.down()).isOf(Blocks.SOUL_SAND) || world.getBlockState(pos.down()).isOf(Blocks.SOUL_SOIL) && world.getBlockState(pos.up(3)).isAir() && list.isEmpty()) {
+        	//System.out.println("Spawn should have succeeded!");
+        	return true;
+        } else {
+        	return false;
+        }
     }
 
     @Override

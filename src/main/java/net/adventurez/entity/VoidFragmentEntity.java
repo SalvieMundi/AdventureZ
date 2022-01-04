@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import net.adventurez.entity.nonliving.ThrownRockEntity;
-import net.adventurez.entity.nonliving.VoidBulletEntity;
+//import net.adventurez.entity.nonliving.VoidBulletEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityDimensions;
@@ -35,168 +35,168 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 
-public class VoidFragmentEntity extends FlyingEntity implements Monster {
-
-    public static final TrackedData<Boolean> IS_VOID_ORB = DataTracker.registerData(VoidFragmentEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public boolean isVoidOrb;
-    private int deathTick;
-
-    public VoidFragmentEntity(EntityType<? extends FlyingEntity> entityType, World world) {
-        super(entityType, world);
-    }
-
-    public static DefaultAttributeContainer.Builder createVoidFragmentAttributes() {
-        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0D)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 10.0D);
-    }
-
-    @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityTag) {
-        if (spawnReason == SpawnReason.SPAWN_EGG) {
-            this.setVoidOrb(true);
-        }
-
-        return super.initialize(world, difficulty, spawnReason, (EntityData) entityData, entityTag);
-    }
-
-    @Override
-    public void initDataTracker() {
-        super.initDataTracker();
-        dataTracker.startTracking(IS_VOID_ORB, false);
-    }
-
-    @Override
-    public void writeCustomDataToNbt(NbtCompound tag) {
-        super.writeCustomDataToNbt(tag);
-        tag.putBoolean("IsVoidOrb", this.isVoidOrb);
-
-    }
-
-    @Override
-    public void readCustomDataFromNbt(NbtCompound tag) {
-        super.readCustomDataFromNbt(tag);
-        this.isVoidOrb = tag.getBoolean("IsVoidOrb");
-        this.setVoidOrb(this.isVoidOrb);
-    }
-
-    public void setVoidOrb(boolean orb) {
-        this.isVoidOrb = orb;
-        dataTracker.set(IS_VOID_ORB, orb);
-        this.refreshPosition();
-        this.calculateDimensions();
-    }
-
-    @Override
-    public EntityDimensions getDimensions(EntityPose pose) {
-        return super.getDimensions(pose).scaled(1.0F, (this.isVoidOrb || this.dataTracker.get(IS_VOID_ORB)) ? 2.1F : 1.2F);
-    }
-
-    @Override
-    public void onTrackedDataSet(TrackedData<?> data) {
-        if (IS_VOID_ORB.equals(data)) {
-            this.refreshPosition();
-            this.calculateDimensions();
-            this.setYaw(this.headYaw);
-            this.bodyYaw = this.headYaw;
-        }
-
-        super.onTrackedDataSet(data);
-    }
-
-    @Override
-    public void updatePostDeath() {
-        if (this.world.isClient) {
-            for (int i = 0; i < 10; ++i) {
-                double d = this.random.nextGaussian() * 0.05D;
-                double e = this.random.nextGaussian() * 0.05D;
-                double f = this.random.nextGaussian() * 0.05D;
-                this.world.addParticle(ParticleTypes.END_ROD, this.getParticleX(1.0D), this.getRandomBodyY(), this.getParticleZ(1.0D), d, e, f);
-            }
-        }
-        ++this.deathTick;
-        if (this.deathTick >= 20 && !this.world.isClient()) {
-            this.remove(Entity.RemovalReason.KILLED);
-        }
-    }
-
-    @Override
-    public void onDeath(DamageSource source) {
-        if (!this.world.isClient && this.isVoidOrb) {
-            Box box = new Box(this.getBlockPos());
-            List<VoidShadowEntity> list = world.getEntitiesByClass(VoidShadowEntity.class, box.expand(120D), EntityPredicates.EXCEPT_SPECTATOR);
-            for (int i = 0; i < list.size(); ++i) {
-                list.get(i).damage(DamageSource.MAGIC, 40F);
-            }
-        }
-        super.onDeath(source);
-    }
-
-    @Override
-    public void mobTick() {
-        super.mobTick();
-        if (!this.world.isClient && this.world.getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(0.8D), this) != null) {
-            this.dead = true;
-            this.world.createExplosion(this, this.getX(), this.getY(), this.getZ(), this.isVoidOrb ? 4.0F : 3.0F, Explosion.DestructionType.NONE);
-            this.discard();
-        }
-    }
-
-    @Override
-    public boolean damage(DamageSource source, float amount) {
-        if ((source.getAttacker() != null && source.getAttacker() instanceof PlayerEntity && ((PlayerEntity) source.getAttacker()).isCreative())) {
-            return super.damage(source, amount);
-        }
-        if (this.isInvulnerableTo(source) || source.getSource() instanceof ThrownRockEntity || (this.isVoidOrb && !(source.getSource() instanceof VoidBulletEntity))) {
-            return false;
-        } else
-            return super.damage(source, source.getSource() instanceof VoidBulletEntity ? this.getHealth() : amount);
-    }
-
-    @Override
-    public void checkDespawn() {
-        if (this.world.getDifficulty() == Difficulty.PEACEFUL) {
-            this.discard();
-        }
-    }
-
-    @Override
-    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
-        return false;
-    }
-
-    @Override
-    public boolean addStatusEffect(StatusEffectInstance effect, Entity entity) {
-        return false;
-    }
-
-    @Override
-    public EntityGroup getGroup() {
-        return EntityGroup.UNDEAD;
-    }
-
-    @Override
-    public boolean canStartRiding(Entity entity) {
-        return false;
-    }
-
-    @Override
-    public boolean canUsePortals() {
-        return false;
-    }
-
-    @Override
-    public boolean canHaveStatusEffect(StatusEffectInstance effect) {
-        return false;
-    }
-
-    @Override
-    public boolean isPushable() {
-        return false;
-    }
-
-    @Override
-    public boolean isPushedByFluids() {
-        return false;
-    }
-
-}
+//public class VoidFragmentEntity extends FlyingEntity implements Monster {
+//
+//    public static final TrackedData<Boolean> IS_VOID_ORB = DataTracker.registerData(VoidFragmentEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+//    public boolean isVoidOrb;
+//    private int deathTick;
+//
+//    public VoidFragmentEntity(EntityType<? extends FlyingEntity> entityType, World world) {
+//        super(entityType, world);
+//    }
+//
+//    public static DefaultAttributeContainer.Builder createVoidFragmentAttributes() {
+//        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0D)
+//                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 10.0D);
+//    }
+//
+//    @Override
+//    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityTag) {
+//        if (spawnReason == SpawnReason.SPAWN_EGG) {
+//            this.setVoidOrb(true);
+//        }
+//
+//        return super.initialize(world, difficulty, spawnReason, (EntityData) entityData, entityTag);
+//    }
+//
+//    @Override
+//    public void initDataTracker() {
+//        super.initDataTracker();
+//        dataTracker.startTracking(IS_VOID_ORB, false);
+//    }
+//
+//    @Override
+//    public void writeCustomDataToNbt(NbtCompound tag) {
+//        super.writeCustomDataToNbt(tag);
+//        tag.putBoolean("IsVoidOrb", this.isVoidOrb);
+//
+//    }
+//
+//    @Override
+//    public void readCustomDataFromNbt(NbtCompound tag) {
+//        super.readCustomDataFromNbt(tag);
+//        this.isVoidOrb = tag.getBoolean("IsVoidOrb");
+//        this.setVoidOrb(this.isVoidOrb);
+//    }
+//
+//    public void setVoidOrb(boolean orb) {
+//        this.isVoidOrb = orb;
+//        dataTracker.set(IS_VOID_ORB, orb);
+//        this.refreshPosition();
+//        this.calculateDimensions();
+//    }
+//
+//    @Override
+//    public EntityDimensions getDimensions(EntityPose pose) {
+//        return super.getDimensions(pose).scaled(1.0F, (this.isVoidOrb || this.dataTracker.get(IS_VOID_ORB)) ? 2.1F : 1.2F);
+//    }
+//
+//    @Override
+//    public void onTrackedDataSet(TrackedData<?> data) {
+//        if (IS_VOID_ORB.equals(data)) {
+//            this.refreshPosition();
+//            this.calculateDimensions();
+//            this.setYaw(this.headYaw);
+//            this.bodyYaw = this.headYaw;
+//        }
+//
+//        super.onTrackedDataSet(data);
+//    }
+//
+//    @Override
+//    public void updatePostDeath() {
+//        if (this.world.isClient) {
+//            for (int i = 0; i < 10; ++i) {
+//                double d = this.random.nextGaussian() * 0.05D;
+//                double e = this.random.nextGaussian() * 0.05D;
+//                double f = this.random.nextGaussian() * 0.05D;
+//                this.world.addParticle(ParticleTypes.END_ROD, this.getParticleX(1.0D), this.getRandomBodyY(), this.getParticleZ(1.0D), d, e, f);
+//            }
+//        }
+//        ++this.deathTick;
+//        if (this.deathTick >= 20 && !this.world.isClient()) {
+//            this.remove(Entity.RemovalReason.KILLED);
+//        }
+//    }
+//
+//    @Override
+//    public void onDeath(DamageSource source) {
+//        if (!this.world.isClient && this.isVoidOrb) {
+//            Box box = new Box(this.getBlockPos());
+//            List<VoidShadowEntity> list = world.getEntitiesByClass(VoidShadowEntity.class, box.expand(120D), EntityPredicates.EXCEPT_SPECTATOR);
+//            for (int i = 0; i < list.size(); ++i) {
+//                list.get(i).damage(DamageSource.MAGIC, 40F);
+//            }
+//        }
+//        super.onDeath(source);
+//    }
+//
+//    @Override
+//    public void mobTick() {
+//        super.mobTick();
+//        if (!this.world.isClient && this.world.getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(0.8D), this) != null) {
+//            this.dead = true;
+//            this.world.createExplosion(this, this.getX(), this.getY(), this.getZ(), this.isVoidOrb ? 4.0F : 3.0F, Explosion.DestructionType.NONE);
+//            this.discard();
+//        }
+//    }
+//
+//    @Override
+//    public boolean damage(DamageSource source, float amount) {
+//        if ((source.getAttacker() != null && source.getAttacker() instanceof PlayerEntity && ((PlayerEntity) source.getAttacker()).isCreative())) {
+//            return super.damage(source, amount);
+//        }
+//        if (this.isInvulnerableTo(source) || source.getSource() instanceof ThrownRockEntity || (this.isVoidOrb && !(source.getSource() instanceof VoidBulletEntity))) {
+//            return false;
+//        } else
+//            return super.damage(source, source.getSource() instanceof VoidBulletEntity ? this.getHealth() : amount);
+//    }
+//
+//    @Override
+//    public void checkDespawn() {
+//        if (this.world.getDifficulty() == Difficulty.PEACEFUL) {
+//            this.discard();
+//        }
+//    }
+//
+//    @Override
+//    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean addStatusEffect(StatusEffectInstance effect, Entity entity) {
+//        return false;
+//    }
+//
+//    @Override
+//    public EntityGroup getGroup() {
+//        return EntityGroup.UNDEAD;
+//    }
+//
+//    @Override
+//    public boolean canStartRiding(Entity entity) {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean canUsePortals() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean canHaveStatusEffect(StatusEffectInstance effect) {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isPushable() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isPushedByFluids() {
+//        return false;
+//    }
+//
+//}

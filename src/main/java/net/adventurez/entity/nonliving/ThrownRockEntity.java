@@ -76,10 +76,10 @@ public class ThrownRockEntity extends ThrownItemEntity {
                 this.world.addParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, state), this.getX() + this.world.random.nextDouble() * 0.35D - 0.175D, this.getY(),
                         this.getZ() + this.world.random.nextDouble() * 0.35D - 0.175D, 0.0D, 0.1D, 0.0D);
         } else {
-            if (this.getOwner() instanceof PlayerEntity && ((PlayerEntity) this.getOwner()).hasStatusEffect(EffectInit.BLACKSTONED_HEART)) {
-                Explosion.DestructionType destructionType = this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE;
-                this.world.createExplosion(this, this.getX(), this.getEyeY(), this.getZ(), 1.5F, false, destructionType);
-            }
+//            if (this.getOwner() instanceof PlayerEntity && ((PlayerEntity) this.getOwner()).hasStatusEffect(EffectInit.BLACKSTONED_HEART)) {
+//                Explosion.DestructionType destructionType = this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE;
+//                this.world.createExplosion(this, this.getX(), this.getEyeY(), this.getZ(), 1.5F, false, destructionType);
+//            }
             this.world.playSound(null, this.getBlockPos(), SoundInit.ROCK_IMPACT_EVENT, SoundCategory.BLOCKS, 0.7F, 1F);
             this.world.sendEntityStatus(this, (byte) 3);
             this.discard();

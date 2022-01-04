@@ -38,13 +38,16 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.World;
@@ -70,8 +73,13 @@ public class EnderWhaleEntity extends FlyingEntity implements ItemSteerable {
     public static boolean canSpawn(EntityType<EnderWhaleEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         BlockState blockState = world.getBlockState(pos);
         List<EnderDragonEntity> list = world.getEntitiesByClass(EnderDragonEntity.class, new Box(pos).expand(80D), EntityPredicates.EXCEPT_SPECTATOR);
-        return random.nextInt(6) == 0 && pos.getY() > 40 && pos.getY() - world.getTopPosition(Heightmap.Type.WORLD_SURFACE, pos).getY() > 20 && blockState.isAir() && list.isEmpty()
-                && SpawnHelper.isClearForSpawn(world, pos, blockState, blockState.getFluidState(), EntityInit.ENDER_WHALE_ENTITY);
+        //System.out.println("Trying to spawn " + type.toString() + " on " + world.getBlockState(pos).getBlock().toString() + " in " + (new TranslatableText(Util.createTranslationKey("biome", world.getRegistryManager().get(Registry.BIOME_KEY).getId(world.getBiome(pos))))).getString() + " (light level: " + world.getBaseLightLevel(pos, 0) + ") at x:" + pos.getX() + ", y:" + pos.getY() + ", z:" + pos.getZ() + " for reason: " + spawnReason.toString() + "!");
+        if (pos.getY() > 90 && blockState.isAir() && list.isEmpty() && SpawnHelper.isClearForSpawn(world, pos, blockState, blockState.getFluidState(), EntityInit.ENDER_WHALE_ENTITY)) {
+        	//System.out.println("Spawn should have succeeded!");
+        	return true;
+        } else {
+        	return false;
+        }
     }
 
     @Override

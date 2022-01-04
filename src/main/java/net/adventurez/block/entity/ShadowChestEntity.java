@@ -198,9 +198,9 @@ public class ShadowChestEntity extends LootableContainerBlockEntity implements C
                 this.inventory.set(i, new ItemStack(net.medievalweapons.init.ItemInit.THALLEOUS_SWORD));
                 continue;
             }
-            if (i == 13) {
-                this.inventory.set(i, new ItemStack(ItemInit.SOURCE_STONE));
-            } else {
+            if (i != 13) {
+                /* this.inventory.set(i, new ItemStack(ItemInit.SOURCE_STONE));
+            } else { */
                 switch (this.world.random.nextInt(10)) {
                 case 0:
                     this.inventory.set(i, new ItemStack(Items.ENDER_PEARL, this.world.random.nextInt(5) + 1));
@@ -230,5 +230,4 @@ public class ShadowChestEntity extends LootableContainerBlockEntity implements C
             }
         }
     }
-
 }

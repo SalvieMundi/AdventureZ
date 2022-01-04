@@ -33,7 +33,11 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
@@ -50,8 +54,18 @@ public class IguanaEntity extends AnimalEntity {
         return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.22D);
     }
 
-    public static boolean isValidNaturalSpawn(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getBlockState(pos.down()).isOf(Blocks.RED_SAND) && world.getBaseLightLevel(pos, 0) > 8;
+//    public static boolean isValidNaturalSpawn(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+//        return world.getBlockState(pos.down()).isOf(Blocks.RED_SAND) && world.getBaseLightLevel(pos, 0) > 8;
+//    }
+
+    public static boolean canSpawn(EntityType<IguanaEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+    	//System.out.println("Trying to spawn " + type.toString() + " on " + world.getBlockState(pos.down()).getBlock().toString() + " in " + (new TranslatableText(Util.createTranslationKey("biome", world.getRegistryManager().get(Registry.BIOME_KEY).getId(world.getBiome(pos))))).getString() + " (light level: " + world.getBaseLightLevel(pos, 0) + ") at x:" + pos.getX() + ", y:" + pos.getY() + ", z:" + pos.getZ() + " for reason: " + spawnReason.toString() + "!");
+        if (world.getBlockState(pos.down()).isOf(Blocks.RED_SAND) || world.getBlockState(pos.down()).isOf(Blocks.SAND) || world.getBlockState(pos.down()).isOf(Blocks.GRASS_BLOCK) || world.getBlockState(pos.down()).isOf(Blocks.TERRACOTTA)) {
+        	//System.out.println("Spawn should have succeeded!");
+        	return true;
+        } else {
+        	return false;
+        }
     }
 
     @Override

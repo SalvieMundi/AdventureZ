@@ -1,1 +1,0 @@
-give @s adventurez:prime_eye

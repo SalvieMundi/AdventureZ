@@ -34,9 +34,12 @@ import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -59,8 +62,13 @@ public class DesertRhinoEntity extends HostileEntity {
 
     public static boolean canSpawn(EntityType<DesertRhinoEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         List<DesertRhinoEntity> list = world.getEntitiesByClass(DesertRhinoEntity.class, new Box(pos).expand(120D), EntityPredicates.EXCEPT_SPECTATOR);
-        return ((world.getBlockState(pos.down()).isOf(Blocks.SAND) || world.getBlockState(pos.down()).isOf(Blocks.SANDSTONE)) && world.getBaseLightLevel(pos, 0) > 8 && world.isSkyVisible(pos)
-                && list.isEmpty() && world.getRandom().nextFloat() < 0.5F) || spawnReason == SpawnReason.SPAWNER;
+        //System.out.println("Trying to spawn " + type.toString() + " on " + world.getBlockState(pos.down()).getBlock().toString() + " in " + (new TranslatableText(Util.createTranslationKey("biome", world.getRegistryManager().get(Registry.BIOME_KEY).getId(world.getBiome(pos))))).getString() + " (light level: " + world.getBaseLightLevel(pos, 0) + ") at x:" + pos.getX() + ", y:" + pos.getY() + ", z:" + pos.getZ() + " for reason: " + spawnReason.toString() + "!");
+        if (((world.getBlockState(pos.down()).isOf(Blocks.SAND) || world.getBlockState(pos.down()).isOf(Blocks.SANDSTONE)) && world.isSkyVisible(pos) && list.isEmpty()) || spawnReason == SpawnReason.SPAWNER) {
+        	//System.out.println("Spawn should have succeeded!");
+        	return true;
+        } else {
+        	return false;
+        }
     }
 
     @Override

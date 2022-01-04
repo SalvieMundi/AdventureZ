@@ -1,10 +1,13 @@
 package net.adventurez.entity;
 
+import java.util.Random;
 import java.util.UUID;
 
 import net.adventurez.init.EntityInit;
 import net.adventurez.init.SoundInit;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -36,11 +39,15 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.TimeHelper;
+import net.minecraft.util.Util;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,6 +65,16 @@ public class MammothEntity extends AnimalEntity implements Angerable {
     public static DefaultAttributeContainer.Builder createMammothAttributes() {
         return AnimalEntity.createLivingAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 40.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 26.0D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 7.0D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.5D);
+    }
+
+    public static boolean canSpawn(EntityType<MammothEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+        //System.out.println("Trying to spawn " + type.toString() + " on " + world.getBlockState(pos.down()).getBlock().toString() + " in " + (new TranslatableText(Util.createTranslationKey("biome", world.getRegistryManager().get(Registry.BIOME_KEY).getId(world.getBiome(pos))))).getString() + " (light level: " + world.getBaseLightLevel(pos, 0) + ") at x:" + pos.getX() + ", y:" + pos.getY() + ", z:" + pos.getZ() + " for reason: " + spawnReason.toString() + "!");
+        if ((world.getBlockState(pos.down()).isOf(Blocks.GRASS_BLOCK) || world.getBlockState(pos.down()).isOf(Blocks.SNOW) || world.getBlockState(pos.down()).isOf(Blocks.SNOW_BLOCK)) && SpawnHelper.isClearForSpawn(world, pos, world.getBlockState(pos), world.getBlockState(pos).getFluidState(), EntityInit.MAMMOTH_ENTITY)) {
+        	//System.out.println("Spawn should have succeeded!");
+        	return true;
+        } else {
+        	return false;
+        }
     }
 
     @Override

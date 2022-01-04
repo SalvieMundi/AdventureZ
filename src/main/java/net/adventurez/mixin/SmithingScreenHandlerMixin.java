@@ -45,16 +45,16 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
         ItemStack itemStack = this.input.getStack(0);
-        if (itemStack.getItem() == ItemInit.PRIME_EYE && itemStack.getDamage() != 0) {
-            ItemStack itemStack2 = this.input.getStack(1);
-            if (itemStack2.getItem() == Items.ENDER_PEARL) {
-                ItemStack itemStack3 = new ItemStack(ItemInit.PRIME_EYE);
-                repairedAmount = itemStack2.getCount() > itemStack.getDamage() ? itemStack.getDamage() : itemStack2.getCount();
-                itemStack3.setDamage(itemStack.getDamage() - repairedAmount);
-                this.output.setStack(0, itemStack3);
-                info.cancel();
-            }
-        }
+//        if (itemStack.getItem() == ItemInit.PRIME_EYE && itemStack.getDamage() != 0) {
+//            ItemStack itemStack2 = this.input.getStack(1);
+//            if (itemStack2.getItem() == Items.ENDER_PEARL) {
+//                ItemStack itemStack3 = new ItemStack(ItemInit.PRIME_EYE);
+//                repairedAmount = itemStack2.getCount() > itemStack.getDamage() ? itemStack.getDamage() : itemStack2.getCount();
+//                itemStack3.setDamage(itemStack.getDamage() - repairedAmount);
+//                this.output.setStack(0, itemStack3);
+//                info.cancel();
+//            }
+//        }
     }
 
     @Inject(method = "canTakeOutput", at = @At("HEAD"), cancellable = true)
@@ -67,24 +67,24 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
         ItemStack itemStack = this.input.getStack(0);
-        if (itemStack.getItem() == ItemInit.PRIME_EYE && itemStack.getDamage() != 0) {
-            ItemStack itemStack2 = this.input.getStack(1);
-            if (itemStack2.getItem() == Items.ENDER_PEARL) {
-                info.setReturnValue(true);
-            }
-        }
+//        if (itemStack.getItem() == ItemInit.PRIME_EYE && itemStack.getDamage() != 0) {
+//            ItemStack itemStack2 = this.input.getStack(1);
+//            if (itemStack2.getItem() == Items.ENDER_PEARL) {
+//                info.setReturnValue(true);
+//            }
+//        }
     }
 
-    @Inject(method = "onTakeOutput", at = @At("HEAD"))
-    public void onTakeOutputMixin(PlayerEntity player, ItemStack stack, CallbackInfo info) {
-        ItemStack itemStack = this.input.getStack(0);
-        if (itemStack.getItem() == ItemInit.PRIME_EYE) {
-            ItemStack itemStack2 = this.input.getStack(1);
-            if (itemStack2.getItem() == Items.ENDER_PEARL) {
-                itemStack2.decrement(repairedAmount - 1);
-                this.input.setStack(1, itemStack2);
-            }
-        }
-    }
+//    @Inject(method = "onTakeOutput", at = @At("HEAD"))
+//    public void onTakeOutputMixin(PlayerEntity player, ItemStack stack, CallbackInfo info) {
+//        ItemStack itemStack = this.input.getStack(0);
+//        if (itemStack.getItem() == ItemInit.PRIME_EYE) {
+//            ItemStack itemStack2 = this.input.getStack(1);
+//            if (itemStack2.getItem() == Items.ENDER_PEARL) {
+//                itemStack2.decrement(repairedAmount - 1);
+//                this.input.setStack(1, itemStack2);
+//            }
+//        }
+//    }
 
 }

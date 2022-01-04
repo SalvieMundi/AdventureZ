@@ -6,13 +6,13 @@ import net.minecraft.util.registry.Registry;
 
 public class SoundInit {
     // Stone Golem
-    public static SoundEvent GOLEM_IDLE_EVENT = register("adventurez:golem_idle");
-    public static SoundEvent GOLEM_WALK_EVENT = register("adventurez:golem_walk");
-    public static SoundEvent GOLEM_HIT_EVENT = register("adventurez:golem_hit");
-    public static SoundEvent GOLEM_ROAR_EVENT = register("adventurez:golem_roar");
-    public static SoundEvent GOLEM_DEATH_EVENT = register("adventurez:golem_death");
-    public static SoundEvent GOLEM_SPAWN_EVENT = register("adventurez:golem_spawn");
-    public static SoundEvent GOLEM_AWAKENS_EVENT = register("adventurez:golem_awakens");
+//    public static SoundEvent GOLEM_IDLE_EVENT = register("adventurez:golem_idle");
+//    public static SoundEvent GOLEM_WALK_EVENT = register("adventurez:golem_walk");
+//    public static SoundEvent GOLEM_HIT_EVENT = register("adventurez:golem_hit");
+//    public static SoundEvent GOLEM_ROAR_EVENT = register("adventurez:golem_roar");
+//    public static SoundEvent GOLEM_DEATH_EVENT = register("adventurez:golem_death");
+//    public static SoundEvent GOLEM_SPAWN_EVENT = register("adventurez:golem_spawn");
+//    public static SoundEvent GOLEM_AWAKENS_EVENT = register("adventurez:golem_awakens");
     // Small Golem
     public static SoundEvent SMALL_GOLEM_IDLE_EVENT = register("adventurez:small_golem_idle");
     public static SoundEvent SMALL_GOLEM_WALK_EVENT = register("adventurez:small_golem_walk");
@@ -38,10 +38,10 @@ public class SoundInit {
     public static SoundEvent SPELL_CAST_SHIELD_EVENT = register("adventurez:spellcast_shield");
     public static SoundEvent MAGIC_SHIELD_HIT_EVENT = register("adventurez:magic_shield_hit");
     // The Eye
-    public static SoundEvent EYE_DEATH_EVENT = register("adventurez:eye_death");
-    public static SoundEvent EYE_HURT_EVENT = register("adventurez:eye_hurt");
-    public static SoundEvent EYE_IDLE_EVENT = register("adventurez:eye_idle");
-    public static SoundEvent EYE_DEATH_PLATFORM_EVENT = register("adventurez:eye_death_platform");
+//    public static SoundEvent EYE_DEATH_EVENT = register("adventurez:eye_death");
+//    public static SoundEvent EYE_HURT_EVENT = register("adventurez:eye_hurt");
+//    public static SoundEvent EYE_IDLE_EVENT = register("adventurez:eye_idle");
+//    public static SoundEvent EYE_DEATH_PLATFORM_EVENT = register("adventurez:eye_death_platform");
     // Fungus
     public static SoundEvent FUNGUS_IDLE_EVENT = register("adventurez:fungus_idle");
     public static SoundEvent FUNGUS_HURT_EVENT = register("adventurez:fungus_hurt");
@@ -52,21 +52,21 @@ public class SoundInit {
     public static SoundEvent ORC_IDLE_EVENT = register("adventurez:orc_idle");
     public static SoundEvent ORC_STEP_EVENT = register("adventurez:orc_step");
     // Dragon
-    public static SoundEvent DRAGON_DEATH_EVENT = register("adventurez:dragon_death");
-    public static SoundEvent DRAGON_HIT_EVENT = register("adventurez:dragon_hit");
-    public static SoundEvent DRAGON_IDLE_EVENT = register("adventurez:dragon_idle");
-    public static SoundEvent DRAGON_STEP_EVENT = register("adventurez:dragon_step");
-    public static SoundEvent DRAGON_BREATH_EVENT = register("adventurez:dragon_breath");
+//    public static SoundEvent DRAGON_DEATH_EVENT = register("adventurez:dragon_death");
+//    public static SoundEvent DRAGON_HIT_EVENT = register("adventurez:dragon_hit");
+//    public static SoundEvent DRAGON_IDLE_EVENT = register("adventurez:dragon_idle");
+//    public static SoundEvent DRAGON_STEP_EVENT = register("adventurez:dragon_step");
+//    public static SoundEvent DRAGON_BREATH_EVENT = register("adventurez:dragon_breath");
     // Mammoth
     public static SoundEvent MAMMOTH_HIT_EVENT = register("adventurez:mammoth_hit");
     public static SoundEvent MAMMOTH_IDLE_EVENT = register("adventurez:mammoth_idle");
     public static SoundEvent MAMMOTH_DEATH_EVENT = register("adventurez:mammoth_death");
     public static SoundEvent MAMMOTH_BABY_IDLE_EVENT = register("adventurez:mammoth_baby_idle");
     // Void Shadow
-    public static SoundEvent SHADOW_CAST_EVENT = register("adventurez:shadow_cast");
-    public static SoundEvent SHADOW_PREPARE_EVENT = register("adventurez:shadow_prepare");
-    public static SoundEvent SHADOW_IDLE_EVENT = register("adventurez:shadow_idle");
-    public static SoundEvent SHADOW_DEATH_EVENT = register("adventurez:shadow_death");
+//    public static SoundEvent SHADOW_CAST_EVENT = register("adventurez:shadow_cast");
+//    public static SoundEvent SHADOW_PREPARE_EVENT = register("adventurez:shadow_prepare");
+//    public static SoundEvent SHADOW_IDLE_EVENT = register("adventurez:shadow_idle");
+//    public static SoundEvent SHADOW_DEATH_EVENT = register("adventurez:shadow_death");
     // Iguana
     public static SoundEvent IGUANA_DEATH_EVENT = register("adventurez:iguana_death");
     public static SoundEvent IGUANA_HURT_EVENT = register("adventurez:iguana_hurt");

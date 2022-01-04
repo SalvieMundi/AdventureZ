@@ -1,6 +1,8 @@
 package net.adventurez.entity;
 
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -8,6 +10,7 @@ import net.adventurez.init.ConfigInit;
 import net.adventurez.init.ParticleInit;
 import net.adventurez.init.SoundInit;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -38,6 +41,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -45,6 +49,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
@@ -52,6 +57,9 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Util;
+import net.minecraft.util.registry.Registry;
 
 public class EnderwarthogEntity extends HostileEntity {
 
@@ -86,6 +94,18 @@ public class EnderwarthogEntity extends HostileEntity {
         this.targetSelector.add(4, (new RevengeGoal(this, new Class[] { EndermanEntity.class })));
         this.targetSelector.add(5, (new RevengeGoal(this, new Class[] { EndermiteEntity.class })));
         this.targetSelector.add(6, (new RevengeGoal(this, new Class[] { ShulkerEntity.class })));
+    }    
+    
+    
+    public static boolean canSpawn(EntityType<EnderwarthogEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+    	List<EnderDragonEntity> list = world.getEntitiesByClass(EnderDragonEntity.class, new Box(pos).expand(80D), EntityPredicates.EXCEPT_SPECTATOR);
+        //System.out.println("Trying to spawn " + type.toString() + " on " + world.getBlockState(pos.down()).getBlock().toString() + " in " + (new TranslatableText(Util.createTranslationKey("biome", world.getRegistryManager().get(Registry.BIOME_KEY).getId(world.getBiome(pos))))).getString() + " (light level: " + world.getBaseLightLevel(pos, 0) + ") at x:" + pos.getX() + ", y:" + pos.getY() + ", z:" + pos.getZ() + " for reason: " + spawnReason.toString() + "!");
+        if ((world.getDifficulty() != Difficulty.PEACEFUL && list.isEmpty() && world.getBlockState(pos.down()).isOf(Blocks.END_STONE) && world.isSkyVisible(pos.up()) && isSpawnDark(world, pos, random)) || spawnReason == SpawnReason.SPAWNER) {
+        	//System.out.println("Spawn should have succeeded!");
+        	return true;
+        } else {
+        	return false;
+        }
     }
 
     @Override

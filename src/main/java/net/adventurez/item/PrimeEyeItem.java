@@ -19,42 +19,42 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-public class PrimeEyeItem extends Item {
-    public PrimeEyeItem(Settings settings) {
-        super(settings);
-    }
-
-    @Override
-    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        super.appendTooltip(itemStack, world, tooltip, tooltipContext);
-        if (ConfigInit.CONFIG.allow_extra_tooltips) {
-            tooltip.add(new TranslatableText("item.adventurez.moreinfo.tooltip"));
-            if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), 340)) {
-                tooltip.remove(new TranslatableText("item.adventurez.moreinfo.tooltip"));
-                tooltip.add(new TranslatableText("item.adventurez.prime_eye.tooltip"));
-            }
-        }
-    }
-
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
-        if (itemStack.getDamage() <= itemStack.getMaxDamage() - 1) {
-            world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 0.5F,
-                    0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
-            user.getItemCooldownManager().set(this, 20);
-            if (!world.isClient) {
-                EnderPearlEntity enderPearlEntity = new EnderPearlEntity(world, user);
-                enderPearlEntity.setItem(itemStack);
-                enderPearlEntity.setProperties(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
-                world.spawnEntity(enderPearlEntity);
-                itemStack.setDamage(itemStack.getDamage() + 1);
-            }
-
-            user.incrementStat(Stats.USED.getOrCreateStat(this));
-            return TypedActionResult.success(itemStack, world.isClient());
-        } else
-            return TypedActionResult.pass(itemStack);
-    }
-
-}
+//public class PrimeEyeItem extends Item {
+//    public PrimeEyeItem(Settings settings) {
+//        super(settings);
+//    }
+//
+//    @Override
+//    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
+//        super.appendTooltip(itemStack, world, tooltip, tooltipContext);
+//        if (ConfigInit.CONFIG.allow_extra_tooltips) {
+//            tooltip.add(new TranslatableText("item.adventurez.moreinfo.tooltip"));
+//            if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), 340)) {
+//                tooltip.remove(new TranslatableText("item.adventurez.moreinfo.tooltip"));
+//                tooltip.add(new TranslatableText("item.adventurez.prime_eye.tooltip"));
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+//        ItemStack itemStack = user.getStackInHand(hand);
+//        if (itemStack.getDamage() <= itemStack.getMaxDamage() - 1) {
+//            world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 0.5F,
+//                    0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
+//            user.getItemCooldownManager().set(this, 20);
+//            if (!world.isClient) {
+//                EnderPearlEntity enderPearlEntity = new EnderPearlEntity(world, user);
+//                enderPearlEntity.setItem(itemStack);
+//                enderPearlEntity.setProperties(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
+//                world.spawnEntity(enderPearlEntity);
+//                itemStack.setDamage(itemStack.getDamage() + 1);
+//            }
+//
+//            user.incrementStat(Stats.USED.getOrCreateStat(this));
+//            return TypedActionResult.success(itemStack, world.isClient());
+//        } else
+//            return TypedActionResult.pass(itemStack);
+//    }
+//
+//}

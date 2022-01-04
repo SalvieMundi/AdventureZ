@@ -1,6 +1,6 @@
 package net.adventurez.network;
 
-import net.adventurez.entity.DragonEntity;
+//import net.adventurez.entity.DragonEntity;
 import net.adventurez.init.ConfigInit;
 import net.adventurez.init.ItemInit;
 import net.adventurez.item.armor.StoneGolemArmor;
@@ -21,9 +21,9 @@ public class KeybindPacket {
                 StoneGolemArmor.fireActive(player, stack);
             }
         });
-        ServerPlayNetworking.registerGlobalReceiver(FIRE_BREATH_PACKET, (server, player, handler, buffer, sender) -> {
-            ((DragonEntity) player.getVehicle()).fireBreathActive = true;
-        });
+//        ServerPlayNetworking.registerGlobalReceiver(FIRE_BREATH_PACKET, (server, player, handler, buffer, sender) -> {
+//            ((DragonEntity) player.getVehicle()).fireBreathActive = true;
+//        });
 
     }
 

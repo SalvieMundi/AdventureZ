@@ -21,22 +21,22 @@ public class LootInit {
         return false;
     }
 
-    public static void init() {
-
-        LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
-            if (addedLootTable(id)) {
-                FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder().rolls(BinomialLootNumberProvider.create(1, 0.01F)).with(ItemEntry.builder(ItemInit.GILDED_STONE));
-                supplier.pool(poolBuilder);
-            }
-        });
-
-        LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
-            if ("minecraft:entities/piglin_brute".equals(id.toString())) {
-                FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder().rolls(BinomialLootNumberProvider.create(1, 0.1F)).with(ItemEntry.builder(ItemInit.GILDED_STONE));
-                supplier.pool(poolBuilder);
-            }
-        });
-
-    }
+//    public static void init() {
+//
+//        LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
+//            if (addedLootTable(id)) {
+//                FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder().rolls(BinomialLootNumberProvider.create(1, 0.01F)).with(ItemEntry.builder(ItemInit.GILDED_STONE));
+//                supplier.pool(poolBuilder);
+//            }
+//        });
+//
+//        LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
+//            if ("minecraft:entities/piglin_brute".equals(id.toString())) {
+//                FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder().rolls(BinomialLootNumberProvider.create(1, 0.1F)).with(ItemEntry.builder(ItemInit.GILDED_STONE));
+//                supplier.pool(poolBuilder);
+//            }
+//        });
+//
+//    }
 
 }

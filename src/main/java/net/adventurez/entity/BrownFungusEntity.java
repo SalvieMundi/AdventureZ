@@ -38,9 +38,12 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.TimeHelper;
+import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
@@ -73,7 +76,8 @@ public class BrownFungusEntity extends PathAwareEntity implements Angerable {
     }
 
     public static boolean canSpawn(EntityType<BrownFungusEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getBlockState(pos.down()).isOf(Blocks.MYCELIUM) && world.getBaseLightLevel(pos, 0) > 8;
+    	//System.out.println("Trying to spawn " + type.toString() + " on " + world.getBlockState(pos.down()).getBlock().toString() + " in " + (new TranslatableText(Util.createTranslationKey("biome", world.getRegistryManager().get(Registry.BIOME_KEY).getId(world.getBiome(pos))))).getString() + " (light level: " + world.getBaseLightLevel(pos, 0) + ") at x:" + pos.getX() + ", y:" + pos.getY() + ", z:" + pos.getZ() + " for reason: " + spawnReason.toString() + "!");
+        return (world.getBlockState(pos.down()).isOf(Blocks.MYCELIUM) || world.getBlockState(pos.down()).isOf(Blocks.GRASS_BLOCK));
     }
 
     @Override
